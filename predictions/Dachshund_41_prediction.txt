@@ -1,0 +1,2 @@
+Predicted: Rottweiler
+Confidence: 0.12

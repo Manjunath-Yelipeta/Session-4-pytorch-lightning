@@ -1,0 +1,2 @@
+Predicted: Dachshund
+Confidence: 0.13
