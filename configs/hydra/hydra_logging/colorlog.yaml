@@ -1,0 +1,13 @@
+version: 1
+formatters:
+  colorlog:
+    (): colorlog.ColoredFormatter
+    format: "%(cyan)s%(name)s%(reset)s | %(log_color)s%(levelname)s%(reset)s | %(message)s"
+handlers:
+  console:
+    class: colorlog.StreamHandler
+    formatter: colorlog
+    stream: ext://sys.stderr
+root:
+  level: INFO
+  handlers: [console]

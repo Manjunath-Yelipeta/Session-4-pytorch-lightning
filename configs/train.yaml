@@ -1,0 +1,6 @@
+defaults:
+  - data: dog_breed
+  - paths: default
+  - _self_
+
+# Any other configurations you need

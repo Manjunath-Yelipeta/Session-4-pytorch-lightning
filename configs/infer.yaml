@@ -1,0 +1,14 @@
+defaults:
+  - _self_
+  - data: dog_breed.yaml
+  - paths: default.yaml
+  - hydra: default.yaml
+
+ckpt_path: ${paths.log_dir}/model_tr.ckpt
+num_samples: 10
+
+infer_paths:
+  input_dir: ${paths.root_dir}/input_samples
+  output_dir: ${paths.root_dir}/predictions
+
+total_samples: 10

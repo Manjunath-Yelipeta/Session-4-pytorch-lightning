@@ -1,0 +1,69 @@
+[2024-10-06 03:07:38,972][utils.utils][ERROR] - Exception occurred during task execution.
+Traceback (most recent call last):
+  File "/workspace/Session-4-pytorch-lightning/src/utils/utils.py", line 12, in wrap
+    return task_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/src/train.py", line 38, in train
+    data_module = hydra.utils.instantiate(cfg.data)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 220, in instantiate
+    OmegaConf.resolve(config)
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/omegaconf.py", line 785, in resolve
+    omegaconf._impl._resolve(cfg)
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/_impl.py", line 40, in _resolve
+    _resolve_container_value(cfg, k)
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/_impl.py", line 14, in _resolve_container_value
+    resolved = node._dereference_node()
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/base.py", line 246, in _dereference_node
+    node = self._dereference_node_impl(throw_on_resolution_failure=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/base.py", line 277, in _dereference_node_impl
+    return parent._resolve_interpolation_from_parse_tree(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/base.py", line 584, in _resolve_interpolation_from_parse_tree
+    resolved = self.resolve_parse_tree(
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/base.py", line 764, in resolve_parse_tree
+    return visitor.visit(parse_tree)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/antlr4/tree/Tree.py", line 34, in visit
+    return tree.accept(self)
+           ^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/grammar/gen/OmegaConfGrammarParser.py", line 206, in accept
+    return visitor.visitConfigValue(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/grammar_visitor.py", line 101, in visitConfigValue
+    return self.visit(ctx.getChild(0))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/antlr4/tree/Tree.py", line 34, in visit
+    return tree.accept(self)
+           ^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/grammar/gen/OmegaConfGrammarParser.py", line 342, in accept
+    return visitor.visitText(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/grammar_visitor.py", line 301, in visitText
+    return self._unescape(list(ctx.getChildren()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/grammar_visitor.py", line 389, in _unescape
+    text = str(self.visitInterpolation(node))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/grammar_visitor.py", line 125, in visitInterpolation
+    return self.visit(ctx.getChild(0))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/antlr4/tree/Tree.py", line 34, in visit
+    return tree.accept(self)
+           ^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/grammar/gen/OmegaConfGrammarParser.py", line 921, in accept
+    return visitor.visitInterpolationNode(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/grammar_visitor.py", line 158, in visitInterpolationNode
+    return self.node_interpolation_callback(inter_key, self.memo)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/base.py", line 745, in node_interpolation_callback
+    return self._resolve_node_interpolation(inter_key=inter_key, memo=memo)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/omegaconf/base.py", line 676, in _resolve_node_interpolation
+    raise InterpolationKeyError(f"Interpolation key '{inter_key}' not found")
+omegaconf.errors.InterpolationKeyError: Interpolation key 'paths.data_dir' not found
+[2024-10-06 03:07:38,974][utils.utils][INFO] - Task completed. Check the logs folder for details.

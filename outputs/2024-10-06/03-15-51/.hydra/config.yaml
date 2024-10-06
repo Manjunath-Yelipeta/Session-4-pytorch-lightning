@@ -1,0 +1,12 @@
+data:
+  _target_: src.datamodules.dog_breed.DogBreedDataModule
+  gdrive_url: https://drive.google.com/file/d/15Yk-AaufO41Ocs-mnbgBCW46SsQRFlAI/view?usp=sharing
+  dl_path: ${paths.data_dir}/dataset/
+  train_val_test_split:
+  - 0.8
+  - 0.1
+  - 0.1
+  batch_size: 64
+  num_workers: 8
+  pin_memory: false
+  seed: 42

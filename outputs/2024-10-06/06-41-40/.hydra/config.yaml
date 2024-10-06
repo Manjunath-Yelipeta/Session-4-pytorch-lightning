@@ -1,0 +1,23 @@
+data:
+  _target_: src.datamodules.dog_breed.DogBreedDataModule
+  gdrive_url: https://drive.google.com/file/d/15Yk-AaufO41Ocs-mnbgBCW46SsQRFlAI/view?usp=sharing
+  dl_path: ${paths.data_dir}/dataset/
+  batch_size: 8
+  num_workers: 2
+  train_val_test_split:
+  - 0.8
+  - 0.1
+  - 0.1
+  pin_memory: false
+  seed: 42
+model:
+  _target_: models.catdog_classifier.DogClassifier
+  checkpoint_path: ${paths.log_dir}/model_tr.ckpt
+hardware:
+  device: cpu
+paths:
+  root_dir: ${hydra:runtime.cwd}
+  data_dir: ${paths.root_dir}/data
+  log_dir: ${paths.root_dir}/logs
+  output_dir: ${hydra:runtime.output_dir}
+  work_dir: ${hydra:runtime.cwd}

@@ -1,0 +1,48 @@
+[2024-10-06 05:03:15,205][__main__][INFO] - Current working directory: /workspace/Session-4-pytorch-lightning
+[2024-10-06 05:03:15,206][__main__][INFO] - Configuration keys: dict_keys(['data', 'paths'])
+[2024-10-06 05:03:15,206][__main__][INFO] - Paths configuration: root_dir: /workspace/Session-4-pytorch-lightning
+data_dir: /workspace/Session-4-pytorch-lightning/data/
+log_dir: /workspace/Session-4-pytorch-lightning/logs/
+output_dir: /workspace/Session-4-pytorch-lightning/outputs/2024-10-06/05-03-15
+work_dir: /workspace/Session-4-pytorch-lightning
+
+[2024-10-06 05:03:15,207][__main__][INFO] - Data configuration: _target_: src.datamodules.dog_breed.DogBreedDataModule
+gdrive_url: https://drive.google.com/file/d/15Yk-AaufO41Ocs-mnbgBCW46SsQRFlAI/view?usp=sharing
+dl_path: /workspace/Session-4-pytorch-lightning/data//dataset/
+train_val_test_split:
+- 0.8
+- 0.1
+- 0.1
+batch_size: 32
+num_workers: 4
+pin_memory: false
+seed: 42
+
+[2024-10-06 05:03:15,208][utils.utils][ERROR] - Exception occurred during task execution.
+Traceback (most recent call last):
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 92, in _call_target
+    return _target_(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: DogBreedDataModule.__init__() got an unexpected keyword argument 'pin_memory'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/Session-4-pytorch-lightning/src/utils/utils.py", line 12, in wrap
+    return task_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/src/train.py", line 48, in train
+    data_module = hydra.utils.instantiate(cfg.data)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 226, in instantiate
+    return instantiate_node(
+           ^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 347, in instantiate_node
+    return _call_target(_target_, partial, args, kwargs, full_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 97, in _call_target
+    raise InstantiationException(msg) from e
+hydra.errors.InstantiationException: Error in call to target 'src.datamodules.dog_breed.DogBreedDataModule':
+TypeError("DogBreedDataModule.__init__() got an unexpected keyword argument 'pin_memory'")
+full_key: data
+[2024-10-06 05:03:15,209][utils.utils][INFO] - Task completed. Check the logs folder for details.

@@ -1,0 +1,3 @@
+Original: Bulldog
+Predicted: Bulldog
+Confidence: 1.00

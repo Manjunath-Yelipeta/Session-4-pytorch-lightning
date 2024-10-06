@@ -1,0 +1,19 @@
+defaults:
+  - _self_
+  - paths: default.yaml
+  - data: dog_breed.yaml
+  
+
+data:
+  _target_: src.datamodules.dog_breed.DogBreedDataModule
+  gdrive_url: ${oc.env:GDRIVE_URL}
+  dl_path: ${paths.data_dir}
+  batch_size: 32
+  num_workers: 4
+
+model:
+  _target_: models.catdog_classifier.DogClassifier
+  checkpoint_path: ${paths.log_dir}/model_tr.ckpt
+
+hardware:
+  device: "cpu" # or "cpu" depending on your setup

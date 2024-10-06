@@ -1,0 +1,6 @@
+[2024-10-06 06:41:40,715][__main__][INFO] - Current working directory: /workspace/Session-4-pytorch-lightning
+[2024-10-06 06:41:40,715][__main__][INFO] - Configuration keys: dict_keys(['data', 'model', 'hardware', 'paths'])
+[2024-10-06 06:41:40,981][timm.models._builder][INFO] - Loading pretrained weights from Hugging Face hub (timm/resnet18.a1_in1k)
+[2024-10-06 06:41:41,093][timm.models._hub][INFO] - [timm/resnet18.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+[2024-10-06 06:41:41,103][timm.models._builder][INFO] - Missing keys (fc.weight, fc.bias) discovered while loading pretrained weights. This is expected if model is being adapted.
+[2024-10-06 06:41:44,425][utils.utils][INFO] - Task completed. Check the logs folder for details.

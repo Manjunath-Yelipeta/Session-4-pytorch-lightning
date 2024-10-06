@@ -1,0 +1,11 @@
+[2024-10-06 03:15:51,080][__main__][INFO] - Current working directory: /workspace/Session-4-pytorch-lightning
+[2024-10-06 03:15:51,081][utils.utils][ERROR] - Exception occurred during task execution.
+Traceback (most recent call last):
+  File "/workspace/Session-4-pytorch-lightning/src/utils/utils.py", line 12, in wrap
+    return task_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/Session-4-pytorch-lightning/src/train.py", line 39, in train
+    log.info(f"Configuration: {OmegaConf.to_yaml(cfg)}")
+                               ^^^^^^^^^
+NameError: name 'OmegaConf' is not defined
+[2024-10-06 03:15:51,083][utils.utils][INFO] - Task completed. Check the logs folder for details.

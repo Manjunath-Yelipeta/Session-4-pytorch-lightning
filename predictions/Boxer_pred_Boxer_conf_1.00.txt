@@ -1,0 +1,3 @@
+Original: Boxer
+Predicted: Boxer
+Confidence: 1.00

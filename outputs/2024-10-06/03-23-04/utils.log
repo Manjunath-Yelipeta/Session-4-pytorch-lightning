@@ -1,0 +1,21 @@
+[2024-10-06 03:23:04,186][__main__][INFO] - Current working directory: /workspace/Session-4-pytorch-lightning
+[2024-10-06 03:23:04,187][__main__][INFO] - Configuration keys: dict_keys(['data', 'paths'])
+[2024-10-06 03:23:04,187][__main__][INFO] - Paths configuration: root_dir: ${oc.env:PROJECT_ROOT}
+data_dir: ${paths.root_dir}/data/
+log_dir: ${paths.root_dir}/logs/
+output_dir: ${hydra:runtime.output_dir}
+work_dir: ${hydra:runtime.cwd}
+
+[2024-10-06 03:23:04,188][__main__][INFO] - Data configuration: _target_: src.datamodules.dog_breed.DogBreedDataModule
+gdrive_url: https://drive.google.com/file/d/15Yk-AaufO41Ocs-mnbgBCW46SsQRFlAI/view?usp=sharing
+dl_path: ${paths.data_dir}/dataset/
+train_val_test_split:
+- 0.8
+- 0.1
+- 0.1
+batch_size: 32
+num_workers: 4
+pin_memory: false
+seed: 42
+
+[2024-10-06 03:23:04,188][utils.utils][INFO] - Task completed. Check the logs folder for details.

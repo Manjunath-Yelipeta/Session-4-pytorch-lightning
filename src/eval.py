@@ -1,51 +1,79 @@
-import lightning as L
-import torch
-from lightning.pytorch.loggers import TensorBoardLogger
-from lightning.pytorch.callbacks import (
-    ModelCheckpoint,
-    RichProgressBar,
-    RichModelSummary,
+import os
+from pathlib import Path
+
+import rootutils
+
+# Setup the root of the project
+root = rootutils.setup_root(
+    search_from=__file__,
+    indicator=[".project-root"],
+    pythonpath=True,
+    dotenv=True,
 )
 
-from datamodules.catdog import DogDataModule
+import lightning as L
+import torch
+import hydra
+from omegaconf import DictConfig, OmegaConf
+from sklearn.metrics import classification_report
+
+from src.datamodules.dog_breed import DogBreedDataModule
 from models.catdog_classifier import DogClassifier
 from utils.utils import task_wrapper
 from utils.pylogger import get_pylogger
 from utils.rich_utils import print_config_tree, print_rich_progress, print_rich_panel
-from sklearn.metrics import classification_report
 
 log = get_pylogger(__name__)
 
+@hydra.main(config_path=str(root / "configs"), config_name="eval.yaml", version_base="1.3")
+@task_wrapper
+def eval(cfg: DictConfig):
+    # Resolve the configuration
+    cfg = OmegaConf.to_container(cfg, resolve=True)
+    cfg = OmegaConf.create(cfg)
+    # Print the configuration
+    print_rich_panel("Configuration", "Evaluation Config")
+    print(OmegaConf.to_yaml(cfg))
 
-def eval():
-    print("ABC")
-    class_names=['Beagle','Bulldog','German_Shepherd','Labrador_Retriever', 'Rottweiler','Boxer','Dachshund','Golden_Retriever','Poodle','Yorkshire_Terrier']
-    device = torch.device("cpu")   #"cuda:0"
-    #data_module = DogDataModule()
-    #model = DogClassifier(lr=1e-3)
-    model = DogClassifier().to(device)
-    # create model and load state dict
-    #model.load_state_dict(torch.load("logs/model_tr.ckpt"))
-    model.load_state_dict(torch.load("logs/model_tr.ckpt", map_location=torch.device('cpu'))['state_dict'])
+    # Debug logging
+    log.info(f"Current working directory: {os.getcwd()}")
+    log.info(f"Configuration keys: {cfg.keys()}")
+
+    # Set up data module
+    data_module = hydra.utils.instantiate(cfg.data)
+    data_module.setup(stage="test")  # Only setup for test stage
+
+    # Set up model
+    model = DogClassifier.load_from_checkpoint(cfg.model.checkpoint_path)
     model.eval()
-    y_true=[]
-    y_pred=[]
-    datamodule = DogDataModule()
-    datamodule.setup()
+
+    device = torch.device(cfg.hardware.device)
+    model = model.to(device)
+
+    y_true = []
+    y_pred = []
+
     with torch.no_grad():
-        for test_data in datamodule.test_dataloader():
-            test_images, test_labels = test_data[0].to(device), test_data[1].to(device)
-            pred = model(test_images).argmax(dim=1)
-            for i in range(len(pred)):
-                y_true.append(test_labels[i].item())
-                y_pred.append(pred[i].item())
-    print("My report")            
-    print(classification_report(y_true,y_pred,target_names=class_names,digits=4))
-    config = {"classification report": classification_report(y_true,y_pred,target_names=class_names,digits=4)}
+        for batch in data_module.test_dataloader():
+            x, y = batch
+            x = x.to(device)
+            y = y.to(device)
+            outputs = model(x)
+            _, predicted = torch.max(outputs.data, 1)
+            y_true.extend(y.cpu().numpy())
+            y_pred.extend(predicted.cpu().numpy())
+
+    # Generate classification report
+    report = classification_report(y_true, y_pred, target_names=data_module.class_names, digits=4)
+    
+    print_rich_panel("Classification Report", "Evaluation Results")
+    print(report)
+
+    # Save the report
+    config = {"classification_report": report}
     print_config_tree(config, resolve=True, save_to_file=True)
-    
-    
-    
-    
+
+    return {"config": cfg, "classification_report": report}
+
 if __name__ == "__main__":
     eval()

@@ -1,0 +1,3 @@
+Original: Beagle
+Predicted: Beagle
+Confidence: 0.99

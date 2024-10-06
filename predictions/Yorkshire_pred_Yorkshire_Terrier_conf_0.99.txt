@@ -1,0 +1,3 @@
+Original: Yorkshire
+Predicted: Yorkshire_Terrier
+Confidence: 0.99
