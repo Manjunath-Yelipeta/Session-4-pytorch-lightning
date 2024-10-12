@@ -1,5 +1,5 @@
 from typing import Callable
-from utils.pylogger import get_pylogger
+from src.utils.pylogger import get_pylogger
 
 log = get_pylogger(__name__)
 

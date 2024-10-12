@@ -16,30 +16,15 @@ from omegaconf import DictConfig
 import torch
 from PIL import Image
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_agg import FigureCanvasAgg
-from torchvision import transforms
-import random
-import shutil
-
-# Setup the root of the project
-root = rootutils.setup_root(
-    search_from=__file__,
-    indicator=[".project-root"],
-    pythonpath=True,
-    dotenv=True,
-)
 
 from src.models.catdog_classifier import DogClassifier
-from src.datamodules.dog_breed import DogBreedDataModule
 from src.utils.rich_utils import print_config_tree
 from src.utils import utils
-
 
 log = utils.get_pylogger(__name__)
 
 def load_model(cfg: DictConfig):
-    ckpt_path = cfg.ckpt_path
+    ckpt_path = hydra.utils.instantiate(cfg.ckpt_path)
     log.info(f"Loading model from {ckpt_path}")
     model = DogClassifier.load_from_checkpoint(ckpt_path)
     model.eval()
@@ -93,75 +78,33 @@ def is_valid_image(file_path):
     except Exception:
         return False
 
-def create_input_folder(cfg: DictConfig, data_module: DogBreedDataModule):
-    input_folder = Path(cfg.infer_paths.input_dir)
-    total_samples = cfg.total_samples  # This should be 10 in your config
-    log.info(f"Attempting to create {total_samples} random samples across all classes")
-
-    if not input_folder.exists():
-        input_folder.mkdir(parents=True, exist_ok=True)
-        test_dataset = data_module.test_dataset
-        class_names = data_module.class_names
-        
-        log.info(f"Total number of classes: {len(class_names)}")
-        
-        all_samples = test_dataset.dataset.samples
-        random.shuffle(all_samples)
-        
-        valid_samples = 0
-        for original_path, class_idx in all_samples:
-            if valid_samples >= total_samples:
-                break
-            
-            class_name = class_names[class_idx]
-            
-            if is_valid_image(original_path):
-                img_path = input_folder / f"{class_name}_{valid_samples}{Path(original_path).suffix}"
-                shutil.copy(original_path, img_path)
-                valid_samples += 1
-                log.info(f"Copied valid image: {img_path}")
-        
-        log.info(f"Created input folder with {valid_samples} valid samples at {input_folder}")
-    else:
-        log.info(f"Input folder already exists at {input_folder}")
-        existing_samples = list(input_folder.glob("*"))
-        log.info(f"Found {len(existing_samples)} existing samples")
-    
-    # Verify existing images in the input folder
-    for img_path in input_folder.glob("*"):
-        if img_path.suffix.lower() in ['.png', '.jpg', '.jpeg', '.bmp', '.tiff']:
-            if not is_valid_image(img_path):
-                log.warning(f"Removing invalid image from input folder: {img_path}")
-                img_path.unlink()
-
-    final_sample_count = len(list(input_folder.glob("*")))
-    log.info(f"Final number of samples in input folder: {final_sample_count}")
-
 @hydra.main(config_path=str(root / "configs"), config_name="infer.yaml", version_base="1.3")
 def main(cfg: DictConfig):
     # Print configuration
     print_config_tree(cfg, resolve=True, save_to_file=True)
-    log.info(f"Total samples: {cfg.total_samples}")
 
     # Load model
     model = load_model(cfg)
 
-    # Setup data module
-    data_module = hydra.utils.instantiate(cfg.data)
-    data_module.setup(stage="test")
+    # Instantiate the data module
+    log.info(f"Instantiating datamodule <{cfg.data._target_}>")
+    datamodule = hydra.utils.instantiate(cfg.data)
+    
+    # Setup only the test stage
+    datamodule.setup(stage="test")
 
-    # Create input folder with samples from test set if it doesn't exist
-    create_input_folder(cfg, data_module)
+    # Get transform and class names from the data module
+    transform = datamodule.valid_transform
+    class_names = datamodule.class_names
 
-    # Create output folder
-    output_folder = Path(cfg.infer_paths.output_dir)
+    # Use absolute paths for input and output directories
+    input_folder = Path(cfg.infer_paths.input_dir).resolve()
+    output_folder = Path(cfg.infer_paths.output_dir).resolve()
     output_folder.mkdir(parents=True, exist_ok=True)
 
-    # Perform inference
-    transform = data_module.valid_transform
-    class_names = data_module.class_names
+    log.info(f"Input folder: {input_folder}")
+    log.info(f"Output folder: {output_folder}")
 
-    input_folder = Path(cfg.infer_paths.input_dir)
     input_samples = list(input_folder.glob("*"))
     log.info(f"Number of input samples for inference: {len(input_samples)}")
 
@@ -170,19 +113,13 @@ def main(cfg: DictConfig):
             try:
                 img, img_tensor = process_image(img_path, transform)
                 predicted_class, confidence = get_prediction(model, img_tensor)
-                predicted_label = class_names[predicted_class]
+                predicted_label = class_names[predicted_class] if class_names else f"Class_{predicted_class}"
 
-                # Extract the original class name from the filename
-                original_class = img_path.stem.split('_')[0]
-
-                output_image_path = output_folder / f"{original_class}_pred_{predicted_label}_conf_{confidence:.2f}.png"
+                output_image_path = output_folder / f"{img_path.stem}_pred_{predicted_label}_conf_{confidence:.2f}.png"
                 save_prediction(img, predicted_label, confidence, output_image_path)
 
-                output_text_path = output_folder / f"{original_class}_pred_{predicted_label}_conf_{confidence:.2f}.txt"
-                with open(output_text_path, "w") as f:
-                    f.write(f"Original: {original_class}\nPredicted: {predicted_label}\nConfidence: {confidence:.2f}")
-
-                log.info(f"Processed {img_path.name}: Original {original_class}, Predicted {predicted_label} with confidence {confidence:.2f}")
+                log.info(f"Processed {img_path.name}: Predicted {predicted_label} with confidence {confidence:.2f}")
+                log.info(f"Saved prediction image to {output_image_path}")
             except Exception as e:
                 log.error(f"Error processing {img_path.name}: {str(e)}")
 

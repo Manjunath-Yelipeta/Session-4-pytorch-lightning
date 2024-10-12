@@ -1,0 +1,35 @@
+[2024-10-12 10:33:18,833][__main__][INFO] - Current working directory: /workspace/assignment-4/Session-4-pytorch-lightning
+[2024-10-12 10:33:18,833][__main__][INFO] - Configuration keys: dict_keys(['hardware', 'latest_checkpoint', 'paths', 'data', 'model'])
+[2024-10-12 10:33:18,833][__main__][INFO] - latest_checkpoint config: {'_target_': 'src.utils.checkpoint_utils.find_latest_checkpoint', 'dir': '/workspace/assignment-4/Session-4-pytorch-lightning/logs/runs'}
+[2024-10-12 10:33:18,834][src.utils.checkpoint_utils][INFO] - Searching for checkpoints in: /workspace/assignment-4/Session-4-pytorch-lightning/logs/runs
+[2024-10-12 10:33:18,834][src.utils.checkpoint_utils][INFO] - Latest run directory: /workspace/assignment-4/Session-4-pytorch-lightning/logs/runs/2024-10-11_00-53-49
+[2024-10-12 10:33:18,835][utils.utils][ERROR] - Exception occurred during task execution.
+Traceback (most recent call last):
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 92, in _call_target
+    return _target_(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/utils/checkpoint_utils.py", line 24, in find_latest_checkpoint
+    raise FileNotFoundError(f"Checkpoint directory not found: {checkpoint_dir}")
+FileNotFoundError: Checkpoint directory not found: /workspace/assignment-4/Session-4-pytorch-lightning/logs/runs/2024-10-11_00-53-49/checkpoints
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/utils/utils.py", line 12, in wrap
+    return task_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/eval.py", line 46, in eval
+    checkpoint_path = hydra.utils.instantiate(cfg.latest_checkpoint)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 226, in instantiate
+    return instantiate_node(
+           ^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 347, in instantiate_node
+    return _call_target(_target_, partial, args, kwargs, full_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/hydra/_internal/instantiate/_instantiate2.py", line 97, in _call_target
+    raise InstantiationException(msg) from e
+hydra.errors.InstantiationException: Error in call to target 'src.utils.checkpoint_utils.find_latest_checkpoint':
+FileNotFoundError('Checkpoint directory not found: /workspace/assignment-4/Session-4-pytorch-lightning/logs/runs/2024-10-11_00-53-49/checkpoints')
+full_key: latest_checkpoint
+[2024-10-12 10:33:18,836][utils.utils][INFO] - Task completed. Check the logs folder for details.

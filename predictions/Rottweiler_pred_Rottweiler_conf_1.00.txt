@@ -1,3 +1,0 @@
-Original: Rottweiler
-Predicted: Rottweiler
-Confidence: 1.00

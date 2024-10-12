@@ -1,0 +1,31 @@
+[2024-10-11 11:32:04,816][__main__][INFO] - Current working directory: /workspace/assignment-4/Session-4-pytorch-lightning
+[2024-10-11 11:32:04,816][__main__][INFO] - Configuration keys: dict_keys(['data', 'model', 'hardware', 'paths'])
+[2024-10-11 11:32:05,091][timm.models._builder][INFO] - Loading pretrained weights from Hugging Face hub (timm/resnet18.a1_in1k)
+[2024-10-11 11:32:05,212][timm.models._hub][INFO] - [timm/resnet18.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+[2024-10-11 11:32:05,222][timm.models._builder][INFO] - Missing keys (fc.weight, fc.bias) discovered while loading pretrained weights. This is expected if model is being adapted.
+[2024-10-11 11:32:05,236][utils.utils][ERROR] - Exception occurred during task execution.
+Traceback (most recent call last):
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/utils/utils.py", line 12, in wrap
+    return task_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/eval.py", line 47, in eval
+    model = DogClassifier.load_from_checkpoint(cfg.model.checkpoint_path)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/utilities/model_helpers.py", line 125, in wrapper
+    return self.method(cls, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/core/module.py", line 1582, in load_from_checkpoint
+    loaded = _load_from_checkpoint(
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/core/saving.py", line 91, in _load_from_checkpoint
+    model = _load_state(cls, checkpoint, strict=strict, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/core/saving.py", line 187, in _load_state
+    keys = obj.load_state_dict(checkpoint["state_dict"], strict=strict)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 2215, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for DogClassifier:
+	size mismatch for model.fc.weight: copying a param with shape torch.Size([10, 512]) from checkpoint, the shape in current model is torch.Size([2, 512]).
+	size mismatch for model.fc.bias: copying a param with shape torch.Size([10]) from checkpoint, the shape in current model is torch.Size([2]).
+[2024-10-11 11:32:05,238][utils.utils][INFO] - Task completed. Check the logs folder for details.

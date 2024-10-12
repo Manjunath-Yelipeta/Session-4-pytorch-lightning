@@ -2,18 +2,23 @@ defaults:
   - _self_
   - paths: default.yaml
   - data: dog_breed.yaml
-  
+  - model: dog_classifier.yaml
+  - trainer: default.yaml
 
-data:
-  _target_: src.datamodules.dog_breed.DogBreedDataModule
-  gdrive_url: ${oc.env:GDRIVE_URL}
-  dl_path: ${paths.data_dir}
-  batch_size: 32
-  num_workers: 4
+task_name: "evaluate"
 
-model:
-  _target_: models.catdog_classifier.DogClassifier
-  checkpoint_path: ${paths.log_dir}/model_tr.ckpt
+seed: 42
 
-hardware:
-  device: "cpu" # or "cpu" depending on your setup
+# Checkpoint path resolver
+ckpt_path:
+  _target_: src.utils.checkpoint_utils.find_latest_checkpoint
+  dir: ${paths.log_dir}/runs
+
+# Print the config tree using Rich
+print_config: True
+
+# Disable python warnings if they annoy you
+ignore_warnings: True
+
+# Check if debug mode is on
+debug: False

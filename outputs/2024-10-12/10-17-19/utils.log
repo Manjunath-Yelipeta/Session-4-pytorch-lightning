@@ -1,0 +1,12 @@
+[2024-10-12 10:17:19,172][__main__][INFO] - Current working directory: /workspace/assignment-4/Session-4-pytorch-lightning
+[2024-10-12 10:17:19,173][__main__][INFO] - Configuration keys: dict_keys(['hardware', 'latest_checkpoint', 'paths', 'data', 'model'])
+[2024-10-12 10:17:19,178][__main__][INFO] - Using latest checkpoint: {'_target_': 'src.utils.checkpoint_utils.find_latest_checkpoint', 'dir': '/workspace/assignment-4/Session-4-pytorch-lightning/logs/runs'}
+[2024-10-12 10:17:19,178][utils.utils][ERROR] - Exception occurred during task execution.
+Traceback (most recent call last):
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/utils/utils.py", line 12, in wrap
+    return task_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/eval.py", line 60, in eval
+    raise ValueError(f"Expected checkpoint_path to be a string, got {type(checkpoint_path)}")
+ValueError: Expected checkpoint_path to be a string, got <class 'omegaconf.dictconfig.DictConfig'>
+[2024-10-12 10:17:19,179][utils.utils][INFO] - Task completed. Check the logs folder for details.

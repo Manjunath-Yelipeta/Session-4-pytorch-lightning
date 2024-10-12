@@ -1,0 +1,12 @@
+_target_: src.models.catdog_classifier.DogClassifier
+
+base_model: resnet18
+num_classes: 10
+pretrained: true
+
+lr: 1e-3
+weight_decay: 1e-5
+
+factor: 0.1
+patience: 10
+min_lr: 1e-6

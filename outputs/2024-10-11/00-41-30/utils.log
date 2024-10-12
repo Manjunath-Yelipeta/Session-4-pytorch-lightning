@@ -1,0 +1,106 @@
+[2024-10-11 00:41:30,264][__main__][INFO] - Current working directory: /workspace/assignment-4/Session-4-pytorch-lightning
+[2024-10-11 00:41:30,264][__main__][INFO] - Configuration keys: dict_keys(['data', 'paths'])
+[2024-10-11 00:41:30,264][__main__][INFO] - Paths configuration: root_dir: /workspace/assignment-4/Session-4-pytorch-lightning
+data_dir: /workspace/assignment-4/Session-4-pytorch-lightning/data
+log_dir: /workspace/assignment-4/Session-4-pytorch-lightning/logs
+output_dir: /workspace/assignment-4/Session-4-pytorch-lightning/outputs/2024-10-11/00-41-30
+work_dir: /workspace/assignment-4/Session-4-pytorch-lightning
+
+[2024-10-11 00:41:30,265][__main__][INFO] - Data configuration: _target_: src.datamodules.dog_breed.DogBreedDataModule
+gdrive_url: https://drive.google.com/uc?id=1-EJnDNZZkbcW_0Vy9Fy0zcxFZZOGZQWB
+dl_path: /workspace/assignment-4/Session-4-pytorch-lightning/data
+num_workers: 4
+batch_size: 16
+train_val_test_split:
+- 0.7
+- 0.15
+- 0.15
+seed: 42
+pin_memory: true
+
+[2024-10-11 00:41:30,265][__main__][INFO] - Log directory: /workspace/assignment-4/Session-4-pytorch-lightning/logs
+[2024-10-11 00:41:30,272][__main__][INFO] - Train Dataset Size: 773
+[2024-10-11 00:41:30,272][__main__][INFO] - Validation Dataset Size: 96
+[2024-10-11 00:41:30,272][__main__][INFO] - Test Dataset Size: 98
+[2024-10-11 00:41:30,272][__main__][INFO] - Class Names: ['Beagle', 'Boxer', 'Bulldog', 'Dachshund', 'German_Shepherd', 'Golden_Retriever', 'Labrador_Retriever', 'Poodle', 'Rottweiler', 'Yorkshire_Terrier']
+[2024-10-11 00:41:30,389][timm.models._builder][INFO] - Loading pretrained weights from Hugging Face hub (timm/resnet18.a1_in1k)
+[2024-10-11 00:41:30,512][timm.models._hub][INFO] - [timm/resnet18.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+[2024-10-11 00:41:30,523][timm.models._builder][INFO] - Missing keys (fc.weight, fc.bias) discovered while loading pretrained weights. This is expected if model is being adapted.
+[2024-10-11 00:41:34,141][utils.utils][ERROR] - Exception occurred during task execution.
+Traceback (most recent call last):
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1131, in _try_get_data
+    data = self._data_queue.get(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/gitpod/.pyenv/versions/3.12.6/lib/python3.12/multiprocessing/queues.py", line 113, in get
+    if not self._poll(timeout):
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/gitpod/.pyenv/versions/3.12.6/lib/python3.12/multiprocessing/connection.py", line 257, in poll
+    return self._poll(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/gitpod/.pyenv/versions/3.12.6/lib/python3.12/multiprocessing/connection.py", line 440, in _poll
+    r = wait([self], timeout)
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/gitpod/.pyenv/versions/3.12.6/lib/python3.12/multiprocessing/connection.py", line 1136, in wait
+    ready = selector.select(timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/gitpod/.pyenv/versions/3.12.6/lib/python3.12/selectors.py", line 415, in select
+    fd_event_list = self._selector.poll(timeout)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/torch/utils/data/_utils/signal_handling.py", line 67, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 15653) is killed by signal: Bus error. It is possible that dataloader's workers are out of shared memory. Please try to raise your shared memory limit.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/utils/utils.py", line 12, in wrap
+    return task_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/train.py", line 93, in train
+    trainer.fit(model, datamodule=data_module)
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 538, in fit
+    call._call_and_handle_interrupt(
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/trainer/call.py", line 47, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 574, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 981, in _run
+    results = self._run_stage()
+              ^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/trainer/trainer.py", line 1025, in _run_stage
+    self.fit_loop.run()
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/loops/fit_loop.py", line 205, in run
+    self.advance()
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/loops/fit_loop.py", line 363, in advance
+    self.epoch_loop.run(self._data_fetcher)
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 140, in run
+    self.advance(data_fetcher)
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 212, in advance
+    batch, _, __ = next(data_fetcher)
+                   ^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/loops/fetchers.py", line 133, in __next__
+    batch = super().__next__()
+            ^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/loops/fetchers.py", line 60, in __next__
+    batch = next(self.iterator)
+            ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/utilities/combined_loader.py", line 341, in __next__
+    out = next(self._iterator)
+          ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/lightning/pytorch/utilities/combined_loader.py", line 78, in __next__
+    out[i] = next(self.iterators[i])
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 630, in __next__
+    data = self._next_data()
+           ^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1327, in _next_data
+    idx, data = self._get_data()
+                ^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1293, in _get_data
+    success, data = self._try_get_data()
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1144, in _try_get_data
+    raise RuntimeError(f'DataLoader worker (pid(s) {pids_str}) exited unexpectedly') from e
+RuntimeError: DataLoader worker (pid(s) 15653) exited unexpectedly
+[2024-10-11 00:41:34,146][utils.utils][INFO] - Task completed. Check the logs folder for details.

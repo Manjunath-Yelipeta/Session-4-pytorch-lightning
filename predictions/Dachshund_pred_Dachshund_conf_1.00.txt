@@ -1,3 +1,0 @@
-Original: Dachshund
-Predicted: Dachshund
-Confidence: 1.00

@@ -1,0 +1,33 @@
+hardware:
+  device: cpu
+latest_checkpoint:
+  _target_: src.utils.checkpoint_utils.find_latest_checkpoint
+  dir: ${paths.log_dir}/runs
+paths:
+  root_dir: ${hydra:runtime.cwd}
+  data_dir: ${paths.root_dir}/data
+  log_dir: ${paths.root_dir}/logs
+  output_dir: ${hydra:runtime.output_dir}
+  work_dir: ${hydra:runtime.cwd}
+data:
+  _target_: src.datamodules.dog_breed.DogBreedDataModule
+  gdrive_url: https://drive.google.com/uc?id=1-EJnDNZZkbcW_0Vy9Fy0zcxFZZOGZQWB
+  dl_path: ${paths.data_dir}
+  num_workers: 2
+  batch_size: 8
+  train_val_test_split:
+  - 0.8
+  - 0.1
+  - 0.1
+  seed: 42
+  pin_memory: false
+model:
+  _target_: src.models.catdog_classifier.DogClassifier
+  base_model: resnet18
+  num_classes: 10
+  pretrained: true
+  lr: 0.001
+  weight_decay: 1.0e-05
+  factor: 0.1
+  patience: 10
+  min_lr: 1.0e-06

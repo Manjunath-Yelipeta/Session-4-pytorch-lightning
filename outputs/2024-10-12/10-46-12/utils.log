@@ -1,0 +1,13 @@
+[2024-10-12 10:46:12,676][__main__][INFO] - Instantiating datamodule <src.datamodules.dog_breed.DogBreedDataModule>
+[2024-10-12 10:46:12,680][__main__][INFO] - Instantiating model <src.models.catdog_classifier.DogClassifier>
+[2024-10-12 10:46:12,815][timm.models._builder][INFO] - Loading pretrained weights from Hugging Face hub (timm/resnet18.a1_in1k)
+[2024-10-12 10:46:12,932][timm.models._hub][INFO] - [timm/resnet18.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+[2024-10-12 10:46:12,943][timm.models._builder][INFO] - Missing keys (fc.weight, fc.bias) discovered while loading pretrained weights. This is expected if model is being adapted.
+[2024-10-12 10:46:12,951][__main__][INFO] - Instantiating trainer <lightning.Trainer>
+[2024-10-12 10:46:12,969][src.utils.checkpoint_utils][INFO] - Searching for checkpoints in: /workspace/assignment-4/Session-4-pytorch-lightning/logs/runs
+[2024-10-12 10:46:12,970][src.utils.checkpoint_utils][INFO] - Latest run directory: /workspace/assignment-4/Session-4-pytorch-lightning/logs/runs/2024-10-12_10-33-50
+[2024-10-12 10:46:12,970][src.utils.checkpoint_utils][INFO] - Latest checkpoint file: /workspace/assignment-4/Session-4-pytorch-lightning/logs/runs/2024-10-12_10-33-50/checkpoints/last.ckpt
+[2024-10-12 10:46:12,970][__main__][INFO] - Checkpoint path: /workspace/assignment-4/Session-4-pytorch-lightning/logs/runs/2024-10-12_10-33-50/checkpoints/last.ckpt
+[2024-10-12 10:46:12,970][__main__][INFO] - Starting testing!
+[2024-10-12 10:46:16,559][__main__][INFO] - Best model checkpoint: /workspace/assignment-4/Session-4-pytorch-lightning/logs/runs/2024-10-12_10-33-50/checkpoints/last.ckpt
+[2024-10-12 10:46:16,564][src.utils.utils][INFO] - Task completed. Check the logs folder for details.

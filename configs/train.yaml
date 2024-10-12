@@ -1,6 +1,23 @@
 defaults:
+  - model: dog_classifier
   - data: dog_breed
+  - callbacks: default
+  - logger: default
+  - trainer: default
   - paths: default
-  - _self_
+  - hydra: default
+
+task_name: "train"
+
+tags: ["dev"]
+
+seed: 42
+
+train: true
+test: false
+
+# Add trainer configuration
+trainer:
+  fast_dev_run: false
 
 # Any other configurations you need

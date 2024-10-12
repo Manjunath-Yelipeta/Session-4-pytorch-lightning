@@ -1,0 +1,29 @@
+[2024-10-11 00:44:25,148][__main__][INFO] - Current working directory: /workspace/assignment-4/Session-4-pytorch-lightning
+[2024-10-11 00:44:25,149][__main__][INFO] - Configuration keys: dict_keys(['data', 'paths'])
+[2024-10-11 00:44:25,149][__main__][INFO] - Paths configuration: root_dir: /workspace/assignment-4/Session-4-pytorch-lightning
+data_dir: /workspace/assignment-4/Session-4-pytorch-lightning/data
+log_dir: /workspace/assignment-4/Session-4-pytorch-lightning/logs
+output_dir: /workspace/assignment-4/Session-4-pytorch-lightning/outputs/2024-10-11/00-44-25
+work_dir: /workspace/assignment-4/Session-4-pytorch-lightning
+
+[2024-10-11 00:44:25,150][__main__][INFO] - Data configuration: _target_: src.datamodules.dog_breed.DogBreedDataModule
+gdrive_url: https://drive.google.com/uc?id=1-EJnDNZZkbcW_0Vy9Fy0zcxFZZOGZQWB
+dl_path: /workspace/assignment-4/Session-4-pytorch-lightning/data
+num_workers: 2
+batch_size: 8
+train_val_test_split:
+- 0.8
+- 0.1
+- 0.1
+seed: 42
+pin_memory: false
+
+[2024-10-11 00:44:25,150][__main__][INFO] - Log directory: /workspace/assignment-4/Session-4-pytorch-lightning/logs
+[2024-10-11 00:44:25,156][__main__][INFO] - Train Dataset Size: 773
+[2024-10-11 00:44:25,157][__main__][INFO] - Validation Dataset Size: 96
+[2024-10-11 00:44:25,157][__main__][INFO] - Test Dataset Size: 98
+[2024-10-11 00:44:25,157][__main__][INFO] - Class Names: ['Beagle', 'Boxer', 'Bulldog', 'Dachshund', 'German_Shepherd', 'Golden_Retriever', 'Labrador_Retriever', 'Poodle', 'Rottweiler', 'Yorkshire_Terrier']
+[2024-10-11 00:44:25,274][timm.models._builder][INFO] - Loading pretrained weights from Hugging Face hub (timm/resnet18.a1_in1k)
+[2024-10-11 00:44:25,400][timm.models._hub][INFO] - [timm/resnet18.a1_in1k] Safe alternative available for 'pytorch_model.bin' (as 'model.safetensors'). Loading weights using safetensors.
+[2024-10-11 00:44:25,409][timm.models._builder][INFO] - Missing keys (fc.weight, fc.bias) discovered while loading pretrained weights. This is expected if model is being adapted.
+[2024-10-11 00:46:51,126][utils.utils][INFO] - Task completed. Check the logs folder for details.

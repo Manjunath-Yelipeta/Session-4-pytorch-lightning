@@ -1,104 +1,108 @@
 import os
 from pathlib import Path
-
+import logging
+import hydra
+from omegaconf import DictConfig
+import lightning as L
+from lightning.pytorch.loggers import Logger
+from typing import List
 import rootutils
 
-# Setup the root of the project
-root = rootutils.setup_root(
-    search_from=__file__,
-    indicator=[".project-root"],
-    pythonpath=True,
-    dotenv=True,
-)
+# Setup root directory
+root = rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
 
-# Now you can import your modules
-import lightning as L
-from lightning.pytorch.loggers import TensorBoardLogger
-from lightning.pytorch.callbacks import (
-    ModelCheckpoint,
-    RichProgressBar,
-    RichModelSummary,
-)
-import hydra
-from omegaconf import DictConfig,OmegaConf
+# Imports that require root directory setup
+from src.utils.logging_utils import setup_logger, task_wrapper
 
-from src.datamodules.dog_breed import DogBreedDataModule
-from models.catdog_classifier import DogClassifier
-from utils.utils import task_wrapper
-from utils.pylogger import get_pylogger
-from utils.rich_utils import print_config_tree, print_rich_progress, print_rich_panel
+log = logging.getLogger(__name__)
 
-# Setup logging
-log = get_pylogger(__name__)
+def instantiate_callbacks(callback_cfg: DictConfig) -> List[L.Callback]:
+    callbacks: List[L.Callback] = []
+    if not callback_cfg:
+        log.warning("No callback configs found! Skipping..")
+        return callbacks
+    for _, cb_conf in callback_cfg.items():
+        if "_target_" in cb_conf:
+            log.info(f"Instantiating callback <{cb_conf._target_}>")
+            callbacks.append(hydra.utils.instantiate(cb_conf))
+    return callbacks
 
-@hydra.main(config_path=str(root / "configs"), config_name="train.yaml", version_base="1.3")
+def instantiate_loggers(logger_cfg: DictConfig) -> List[Logger]:
+    loggers: List[Logger] = []
+    if not logger_cfg:
+        log.warning("No logger configs found! Skipping..")
+        return loggers
+    for _, lg_conf in logger_cfg.items():
+        if "_target_" in lg_conf:
+            log.info(f"Instantiating logger <{lg_conf._target_}>")
+            loggers.append(hydra.utils.instantiate(lg_conf))
+    return loggers
+
 @task_wrapper
-def train(cfg: DictConfig):
-    # Resolve the configuration
-    cfg = OmegaConf.to_container(cfg, resolve=True)
-    cfg = OmegaConf.create(cfg)
+def train(
+    cfg: DictConfig,
+    trainer: L.Trainer,
+    model: L.LightningModule,
+    datamodule: L.LightningDataModule,
+):
+    log.info("Starting training!")
+    trainer.fit(model, datamodule)
+    train_metrics = trainer.callback_metrics
+    log.info(f"Training metrics:\n{train_metrics}")
 
-    # Debug logging
-    log.info(f"Current working directory: {os.getcwd()}")
-    log.info(f"Configuration keys: {cfg.keys()}")
-    log.info(f"Paths configuration: {OmegaConf.to_yaml(cfg.paths)}")
-    log.info(f"Data configuration: {OmegaConf.to_yaml(cfg.data)}")
-    
-    # Ensure log directory exists
+@task_wrapper
+def test(
+    cfg: DictConfig,
+    trainer: L.Trainer,
+    model: L.LightningModule,
+    datamodule: L.LightningDataModule,
+):
+    log.info("Starting testing!")
+    if trainer.checkpoint_callback.best_model_path:
+        log.info(f"Loading best checkpoint: {trainer.checkpoint_callback.best_model_path}")
+        test_metrics = trainer.test(model, datamodule, ckpt_path=trainer.checkpoint_callback.best_model_path)
+    else:
+        log.warning("No checkpoint found! Using current model weights.")
+        test_metrics = trainer.test(model, datamodule)
+    log.info(f"Test metrics:\n{test_metrics}")
+
+@hydra.main(version_base="1.3", config_path="../configs", config_name="train")
+def main(cfg: DictConfig):
+    # Set up paths
     log_dir = Path(cfg.paths.log_dir)
-    log_dir.mkdir(parents=True, exist_ok=True)
-    log.info(f"Log directory: {log_dir}")
-
-    # Set up data module
-    data_module = hydra.utils.instantiate(cfg.data)
-    data_module.prepare_data()
-    data_module.setup()
-
-    # Log dataset sizes
-    log.info(f"Train Dataset Size: {len(data_module.train_dataset)}")
-    log.info(f"Validation Dataset Size: {len(data_module.val_dataset)}")
-    log.info(f"Test Dataset Size: {len(data_module.test_dataset)}")
-    log.info(f"Class Names: {data_module.class_names}")
-
-    # Set up model
-    model = DogClassifier(lr=1e-3)
 
     # Set up logger
-    logger = TensorBoardLogger(save_dir=str(log_dir), name="dog_classification")
+    setup_logger(log_dir / "train_log.log")
+
+    # Initialize DataModule
+    log.info(f"Instantiating datamodule <{cfg.data._target_}>")
+    datamodule: L.LightningDataModule = hydra.utils.instantiate(cfg.data)
+
+    # Initialize Model
+    log.info(f"Instantiating model <{cfg.model._target_}>")
+    model: L.LightningModule = hydra.utils.instantiate(cfg.model)
 
     # Set up callbacks
-    checkpoint_callback = ModelCheckpoint(
-        save_on_train_epoch_end=True,
-        dirpath=str(log_dir),
-        filename="model_tr",
-    )
-    rich_progress_bar = RichProgressBar()
-    rich_model_summary = RichModelSummary(max_depth=2)
+    callbacks: List[L.Callback] = instantiate_callbacks(cfg.get("callbacks"))
 
-    # Set up trainer
-    trainer = L.Trainer(
-        max_epochs=2,  # Changed to 2 epochs
-        callbacks=[checkpoint_callback, rich_progress_bar, rich_model_summary],
-        logger=logger,
-        log_every_n_steps=10,
-        accelerator="auto",
-    )
+    # Set up loggers
+    loggers: List[Logger] = instantiate_loggers(cfg.get("logger"))
 
-    # Print config
-    config = {"data": vars(data_module), "model": vars(model), "trainer": vars(trainer)}
-    print_config_tree(config, resolve=True, save_to_file=True, log_dir=str(log_dir))
+    # Initialize Trainer
+    log.info(f"Instantiating trainer <{cfg.trainer._target_}>")
+    trainer: L.Trainer = hydra.utils.instantiate(
+        cfg.trainer,
+        callbacks=callbacks,
+        logger=loggers,
+    )
 
     # Train the model
-    print_rich_panel("Starting training", "Training")
-    trainer.fit(model, datamodule=data_module)
+    if cfg.get("train"):
+        train(cfg, trainer, model, datamodule)
 
     # Test the model
-    print_rich_panel("Starting testing", "Testing")
-    trainer.test(model, datamodule=data_module)
-
-    print_rich_progress("Finishing up")
-
-    return {"config": config, "model": model, "trainer": trainer}
+    if cfg.get("test"):
+        test(cfg, trainer, model, datamodule)
 
 if __name__ == "__main__":
-    train()
+    main()

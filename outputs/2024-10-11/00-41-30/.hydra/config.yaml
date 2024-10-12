@@ -1,0 +1,18 @@
+data:
+  _target_: src.datamodules.dog_breed.DogBreedDataModule
+  gdrive_url: https://drive.google.com/uc?id=1-EJnDNZZkbcW_0Vy9Fy0zcxFZZOGZQWB
+  dl_path: ${paths.data_dir}
+  num_workers: 4
+  batch_size: 16
+  train_val_test_split:
+  - 0.7
+  - 0.15
+  - 0.15
+  seed: 42
+  pin_memory: true
+paths:
+  root_dir: ${hydra:runtime.cwd}
+  data_dir: ${paths.root_dir}/data
+  log_dir: ${paths.root_dir}/logs
+  output_dir: ${hydra:runtime.output_dir}
+  work_dir: ${hydra:runtime.cwd}

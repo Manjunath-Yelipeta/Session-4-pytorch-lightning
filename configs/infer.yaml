@@ -1,10 +1,31 @@
 defaults:
   - _self_
-  - data: dog_breed.yaml
   - paths: default.yaml
+  - data: dog_breed.yaml  # Make sure this points to your data configuration
   - hydra: default.yaml
 
-ckpt_path: ${paths.log_dir}/model_tr.ckpt
+task_name: "infer"
+
+paths:
+  ckpt_dir: ${paths.log_dir}/runs
+  input_dir: /workspace/assignment-4/Session-4-pytorch-lightning/input_samples
+  output_dir: ${paths.root_dir}/predictions
+
+# Checkpoint path resolver
+ckpt_path:
+  _target_: src.utils.checkpoint_utils.find_latest_checkpoint
+  dir: ${paths.ckpt_dir}
+
+print_config: True
+
+ignore_warnings: True
+
+seed: 42
+
+data:
+  batch_size: 64
+  num_workers: 0
+
 num_samples: 10
 
 infer_paths:

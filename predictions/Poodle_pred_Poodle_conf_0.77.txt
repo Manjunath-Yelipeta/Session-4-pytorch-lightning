@@ -1,3 +1,0 @@
-Original: Poodle
-Predicted: Poodle
-Confidence: 0.77

@@ -1,0 +1,44 @@
+[2024-10-11 00:32:28,814][__main__][INFO] - Current working directory: /workspace/assignment-4/Session-4-pytorch-lightning
+[2024-10-11 00:32:28,814][__main__][INFO] - Configuration keys: dict_keys(['data', 'paths'])
+[2024-10-11 00:32:28,815][__main__][INFO] - Paths configuration: root_dir: /workspace/assignment-4/Session-4-pytorch-lightning
+data_dir: /workspace/assignment-4/Session-4-pytorch-lightning/data
+log_dir: /workspace/assignment-4/Session-4-pytorch-lightning/logs
+output_dir: /workspace/assignment-4/Session-4-pytorch-lightning/outputs/2024-10-11/00-32-28
+work_dir: /workspace/assignment-4/Session-4-pytorch-lightning
+
+[2024-10-11 00:32:28,816][__main__][INFO] - Data configuration: _target_: src.datamodules.dog_breed.DogBreedDataModule
+gdrive_url: https://drive.google.com/uc?id=1-EJnDNZZkbcW_0Vy9Fy0zcxFZZOGZQWB
+dl_path: /workspace/assignment-4/Session-4-pytorch-lightning/data/dog_breed
+num_workers: 4
+batch_size: 32
+train_val_test_split:
+- 0.7
+- 0.15
+- 0.15
+seed: 42
+pin_memory: true
+
+[2024-10-11 00:32:28,816][__main__][INFO] - Log directory: /workspace/assignment-4/Session-4-pytorch-lightning/logs
+[2024-10-11 00:32:29,027][utils.utils][ERROR] - Exception occurred during task execution.
+Traceback (most recent call last):
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/utils/utils.py", line 12, in wrap
+    return task_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/train.py", line 55, in train
+    data_module.setup()
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/src/datamodules/dog_breed.py", line 104, in setup
+    full_dataset = ImageFolder(root=self.data_path, transform=self.valid_transform)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/torchvision/datasets/folder.py", line 328, in __init__
+    super().__init__(
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/torchvision/datasets/folder.py", line 149, in __init__
+    classes, class_to_idx = self.find_classes(self.root)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/torchvision/datasets/folder.py", line 234, in find_classes
+    return find_classes(directory)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/assignment-4/Session-4-pytorch-lightning/.venv/lib/python3.12/site-packages/torchvision/datasets/folder.py", line 41, in find_classes
+    classes = sorted(entry.name for entry in os.scandir(directory) if entry.is_dir())
+                                             ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/assignment-4/Session-4-pytorch-lightning/data/dog_breed/dataset'
+[2024-10-11 00:32:29,028][utils.utils][INFO] - Task completed. Check the logs folder for details.
